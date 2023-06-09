@@ -5,7 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import {FaGreaterThan} from 'react-icons/fa'
 import { useState } from 'react';
 
-const apiKey = 'at_Z3OszzOzt2IEtfWGVn10DiELsX2K2'
+const apiKey = process.env.NEXT_PUBLIC_APIKEY
+
 export default function Home() {
  const [formData, setFormData] = useState({ ipAddress: '', data: null });
   const [mapCenter, setMapCenter] = useState([0, 0]);
