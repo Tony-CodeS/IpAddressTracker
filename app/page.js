@@ -1,15 +1,32 @@
-'use client'
+ 'use client'
 import Image from 'next/image'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import {FaGreaterThan} from 'react-icons/fa'
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 
 const apiKey = process.env.NEXT_PUBLIC_APIKEY
 
 export default function Home() {
  const [formData, setFormData] = useState({ ipAddress: '', data: null });
   const [mapCenter, setMapCenter] = useState([0, 0]);
+
+  const [isClient, setIsClient] = useState(false);
+  const [MapContainer, setMapContainer] = useState(null);
+  const [TileLayer, setTileLayer]=useState(null)
+  const [Marker, setMarker] = useState(null)
+  const [Popup, setPopup] = useState(null)
+
+
+  useEffect(() => {
+    setIsClient(true);
+    import('react-leaflet').then((module) => {
+      setMapContainer(module.MapContainer);
+      setTileLayer(module.TileLayer);
+      setMarker(module.Marker);
+      setPopup(module.Popup);
+    });
+  }, []);
 
   const handleInputChange = (event) => {
     setFormData({ ...formData, ipAddress: event.target.value });
@@ -79,7 +96,7 @@ export default function Home() {
    
     </div>
     
-      {formData.data && formData.data.location && (
+      { isClient && MapContainer && formData.data && formData.data.location && (
         <MapContainer center={[formData.data.location.lat, formData.data.location.lng]} zoom={13} scrollWheelZoom={false} className='h-screen z-10'>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
